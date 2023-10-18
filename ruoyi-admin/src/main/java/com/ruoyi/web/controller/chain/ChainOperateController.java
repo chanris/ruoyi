@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.chain;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.chain.HyperchainUtils;
+import com.ruoyi.domain.ChainStatsInfo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,11 @@ class ChainOperateController {
      */
     @GetMapping("/getChainStatsInfo")
     public AjaxResult getChainStatsInfo() {
-
-        return AjaxResult.success();
+        ChainStatsInfo chainStatsInfo = new ChainStatsInfo();
+        chainStatsInfo.setBlockHeight(hyperchainUtils.getBlockHeight());
+        chainStatsInfo.setNodeNum(hyperchainUtils.getNodeNum());
+        chainStatsInfo.setTxSum(hyperchainUtils.getTxSum());
+        chainStatsInfo.setTodayTxNum(hyperchainUtils.getTxNumWithinToday());
+        return AjaxResult.success("success", chainStatsInfo);
     }
 }

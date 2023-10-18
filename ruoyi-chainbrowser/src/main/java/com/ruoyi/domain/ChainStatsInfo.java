@@ -11,7 +11,7 @@ public class ChainStatsInfo extends BaseEntity {
     /** 区块高度*/
     private Integer blockHeight;
     /** 总交易数*/
-    private Integer txNum;
+    private Long txSum;
     /**总节点数*/
     private Integer nodeNum;
     /**当天交易数*/
@@ -20,9 +20,9 @@ public class ChainStatsInfo extends BaseEntity {
     public ChainStatsInfo() {
     }
 
-    public ChainStatsInfo(Integer blockHeight, Integer txNum, Integer nodeNum, Integer todayTxNum) {
+    public ChainStatsInfo(Integer blockHeight, Long txSum, Integer nodeNum, Integer todayTxNum) {
         this.blockHeight = blockHeight;
-        this.txNum = txNum;
+        this.txSum = txSum;
         this.nodeNum = nodeNum;
         this.todayTxNum = todayTxNum;
     }
@@ -35,12 +35,12 @@ public class ChainStatsInfo extends BaseEntity {
         this.blockHeight = blockHeight;
     }
 
-    public Integer getTxNum() {
-        return txNum;
+    public Long getTxSum() {
+        return txSum;
     }
 
-    public void setTxNum(Integer txNum) {
-        this.txNum = txNum;
+    public void setTxSum(Long txSum) {
+        this.txSum = txSum;
     }
 
     public Integer getNodeNum() {
@@ -57,5 +57,15 @@ public class ChainStatsInfo extends BaseEntity {
 
     public void setTodayTxNum(Integer todayTxNum) {
         this.todayTxNum = todayTxNum;
+    }
+
+    @Override
+    public String toString() {
+        return "ChainStatsInfo{" +
+                "blockHeight=" + blockHeight +
+                ", txSum=" + txSum +
+                ", nodeNum=" + nodeNum +
+                ", todayTxNum=" + todayTxNum +
+                '}';
     }
 }

@@ -71,11 +71,11 @@ public class HyperchainUtils {
      * 获得区块交易总量
      * @return 交易总量
      */
-    public Integer getTxNum() {
+    public Long getTxSum() {
         Request<TxCountWithTSResponse> request = txService.getTransactionsCount();
         try {
             TxCountWithTSResponse response = request.send();
-            return response.getCode() == 0 ? hexStr2Int(response.getResult().getCount()) : 0;
+            return response.getCode() == 0 ? hexStr2Long(response.getResult().getCount()) : 0;
         }catch (Exception e) {
             log.error("获得区块交易总量失败  exMsg: {}", e.getClass().getName() + e.getMessage());
             throw new RuntimeException(e.getMessage());
@@ -86,7 +86,7 @@ public class HyperchainUtils {
      * 获得当天的交易量
      * @return 交易量
      */
-    public String getTxNumWithinToday() {
+    public Integer getTxNumWithinToday() {
         // 获得当天的起止时间
         Calendar startTime = Calendar.getInstance();
         Calendar endTime = Calendar.getInstance();
@@ -104,7 +104,7 @@ public class HyperchainUtils {
         try {
             TxCountResponse response = request.send();
             Assert.state(0 == response.getCode(), "查询失败，请稍后重试");
-            return response.getResult();
+            return hexStr2Int(response.getResult());
         }catch (Exception e) {
             log.error("获得当天交易总量失败  exMsg: {}", e.getClass().getName() + e.getMessage());
             throw new RuntimeException(e.getMessage());

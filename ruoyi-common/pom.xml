@@ -17,6 +17,13 @@
 
     <dependencies>
 
+        <!-- https://mvnrepository.com/artifact/cn.hyperchain/litesdk -->
+        <dependency>
+            <groupId>cn.hyperchain</groupId>
+            <artifactId>litesdk</artifactId>
+            <version>1.4.3</version>
+        </dependency>
+
         <!-- Spring框架基本的核心工具 -->
         <dependency>
             <groupId>org.springframework</groupId>

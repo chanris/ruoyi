@@ -140,3 +140,8 @@ xss:
 swagger:
   # 是否开启swagger
   enabled: true
+
+# hyperchain配置
+hyperchain:
+  # 节点服务器，可以是多个
+  nodes: "[\"172.16.9.100:8001\"]"

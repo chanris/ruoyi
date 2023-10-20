@@ -4,6 +4,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.chain.HyperchainUtils;
 import com.ruoyi.domain.ChainStatsInfo;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,7 +32,16 @@ class ChainOperateController {
         chainStatsInfo.setBlockHeight(hyperchainUtils.getBlockHeight());
         chainStatsInfo.setNodeNum(hyperchainUtils.getNodeNum());
         chainStatsInfo.setTxSum(hyperchainUtils.getTxSum());
-        chainStatsInfo.setTodayTxNum(hyperchainUtils.getTxNumWithinToday());
+//        chainStatsInfo.setTodayTxNum(hyperchainUtils.getTxNumWithinToday());
         return AjaxResult.success("success", chainStatsInfo);
+    }
+
+
+    @PostMapping("/upChain")
+    public AjaxResult upChain() {
+        String data = "{\"msg\": \"测试上链\"}";
+        String txHash = hyperchainUtils.saveData(data);
+        System.out.println("txHash: " + txHash);
+        return AjaxResult.success();
     }
 }

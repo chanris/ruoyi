@@ -1,11 +1,15 @@
 package com.ruoyi.common.utils.chain;
 
+import cn.hyperchain.sdk.account.Account;
+import cn.hyperchain.sdk.account.Algo;
 import cn.hyperchain.sdk.request.Request;
+import cn.hyperchain.sdk.response.ReceiptResponse;
 import cn.hyperchain.sdk.response.block.BlockNumberResponse;
 import cn.hyperchain.sdk.response.node.NodeResponse;
 import cn.hyperchain.sdk.response.tx.TxCountResponse;
 import cn.hyperchain.sdk.response.tx.TxCountWithTSResponse;
 import cn.hyperchain.sdk.service.*;
+import cn.hyperchain.sdk.transaction.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -83,6 +87,7 @@ public class HyperchainUtils {
     }
 
     /**
+     * todo 23/10/19 Method not found: the method tx_getTransactionsCountByTime does not exist/is not available
      * 获得当天的交易量
      * @return 交易量
      */
@@ -100,15 +105,39 @@ public class HyperchainUtils {
         endTime.set(Calendar.MILLISECOND, 999);
         // 获得交易量
         Request<TxCountResponse> request = txService.getTxsCountByTime(BigInteger.valueOf(startTime.getTimeInMillis()).multiply(BigInteger.valueOf(1000000L)),
-                BigInteger.valueOf(endTime.getTimeInMillis()).multiply(BigInteger.valueOf(1000000L)));
+                BigInteger.valueOf(endTime.getTimeInMillis()).multiply(BigInteger.valueOf(1000000L)), 1);
         try {
             TxCountResponse response = request.send();
             Assert.state(0 == response.getCode(), "查询失败，请稍后重试");
-            return hexStr2Int(response.getResult());
+            return hexStr2Int(response.getResult().getCount());
         }catch (Exception e) {
             log.error("获得当天交易总量失败  exMsg: {}", e.getClass().getName() + e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    /**
+     * 链上存储数据
+     * @param data
+     * @return
+     */
+    public String saveData(String data) {
+        Account account = accountService.genAccount(Algo.SMRAW);
+        Transaction transaction = new Transaction.HVMBuilder(account.getAddress()).transfer(account.getAddress(), 0L).extra(data).build();
+        transaction.sign(account);
+
+        // 发送交易
+        ReceiptResponse receiptResponse = null;
+        try {
+            receiptResponse = txService.sendTx(transaction).send().polling();
+            Assert.state(0 == receiptResponse.getCode(), "上链交易处理失败，请稍后重试");
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException("数据上链失败，请稍后重试");
+        }
+        String txHash = receiptResponse.getTxHash();
+        log.debug("上链成功, 交易txHash: {}", txHash);
+        return txHash;
     }
 
 

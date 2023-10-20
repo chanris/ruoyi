@@ -21,7 +21,7 @@
         <dependency>
             <groupId>cn.hyperchain</groupId>
             <artifactId>litesdk</artifactId>
-            <version>1.4.3</version>
+            <version>1.6.0</version>
         </dependency>
 
         <!-- Spring框架基本的核心工具 -->

@@ -8,6 +8,7 @@ import cn.hyperchain.sdk.response.block.BlockNumberResponse;
 import cn.hyperchain.sdk.response.node.NodeResponse;
 import cn.hyperchain.sdk.response.tx.TxCountResponse;
 import cn.hyperchain.sdk.response.tx.TxCountWithTSResponse;
+import cn.hyperchain.sdk.response.tx.TxResponse;
 import cn.hyperchain.sdk.service.*;
 import cn.hyperchain.sdk.transaction.Transaction;
 import org.slf4j.Logger;
@@ -17,7 +18,9 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * @author chenyue7@foxmail.com
@@ -138,6 +141,22 @@ public class HyperchainUtils {
         String txHash = receiptResponse.getTxHash();
         log.debug("上链成功, 交易txHash: {}", txHash);
         return txHash;
+    }
+
+    /**
+     * 根据txHash获得交易信息
+     * @return List<TxResponse.Transaction>
+     */
+    public List<TxResponse.Transaction> getTxInfoByHash(String txHash) {
+        Request<TxResponse> request = txService.getTxByHash(txHash);
+        TxResponse response = null;
+        try {
+            response = request.send();
+        }catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException("查询失败，请稍后重试");
+        }
+        return response.getCode() == 0 ? response.getResult() : new ArrayList<>();
     }
 
 

@@ -36,7 +36,18 @@ class ChainOperateController {
         return AjaxResult.success("success", chainStatsInfo);
     }
 
+    /**
+     *
+     */
+    @GetMapping("/getTxInfoByHash")
+    public AjaxResult getTxInfoByHash(String txHash) {
+        return AjaxResult.success("success", hyperchainUtils.getTxInfoByHash(txHash));
+    }
 
+    /**
+     * 上链测试
+     * @return
+     */
     @PostMapping("/upChain")
     public AjaxResult upChain() {
         String data = "{\"msg\": \"测试上链\"}";
